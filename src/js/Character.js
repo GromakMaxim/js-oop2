@@ -7,4 +7,17 @@ export default class Character {
     this.health = 100;
     this.level = 1;
   }
+
+  lvlUp(){
+    if (this.health <=0) throw new Error ('Cant set lvl to dead character');
+    this.level+=1;
+    this.attack += (this.attack * 20) / 100;
+    this.defence += (this.defence * 20) / 100;
+    this.health=100;
+  }
+
+  getDamage(points){
+    if (this.health <=0) throw new Error ('Cant set damage: character has already died');
+    this.health -= points * (1 - this.defence / 100);
+  }
 }

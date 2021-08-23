@@ -9,11 +9,11 @@ import Character from '../Character';
 /*
 illegal data
 */
-test('Проверка превышение длины имени', () => {
+test('check max length name', () => {
   expect(() => { new Character('01234567891'); }).toThrowError('name length must be 2-10 symbols');
 });
 
-test('Проверка слишком короткого имени', () => {
+test('check min length name', () => {
   expect(() => { new Character('о'); }).toThrowError('name length must be 2-10 symbols');
 });
 
@@ -61,4 +61,40 @@ test('check Zombie creation', () => {
   expect(result).toEqual({
     attack: 40, defence: 10, health: 100, level: 1, name: 'test', type: 'Zombie',
   });
+});
+
+/*
+lvlUp + getDamage
+*/
+
+test('lvlUp check', () => {
+  let result = new Zombie('test');
+  result.lvlUp();
+  expect(result).toEqual({
+    attack: 48, defence: 12, health: 100, level: 2, name: 'test', type: 'Zombie',
+  });
+});
+
+test('level should not increase(health=0)', () => {
+  const result = new Zombie('test');
+  result.health = 0;
+  expect(() => { result.lvlUp(); }).toThrowError('Cant set lvl to dead character');
+});
+
+test('level should not increase(health<0)', () => {
+  const result = new Zombie('test');
+  result.health = -10;
+  expect(() => { result.lvlUp(); }).toThrowError('Cant set lvl to dead character');
+});
+
+test('damage will be done', () => {
+  const result = new Zombie('test');
+  result.getDamage(10);
+  expect(result.health).toEqual(91);
+});
+
+test('damage will not be done(health =0)', () => {
+  const result = new Zombie('test');
+  result.health = 0;
+  expect(() => { result.getDamage(10); }).toThrowError('Cant set damage: character has already died');
 });
